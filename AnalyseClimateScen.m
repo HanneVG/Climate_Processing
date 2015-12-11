@@ -108,7 +108,7 @@ clear new i EToFut RainFut TminFut TmaxFut EToHist RainHist TminHist TmaxHist nF
         EToYearTot(:,sc+1)=EToYearTots{1,sc}(:,2);
         RainYearTot(:,sc+1)=RainYearTots{1,sc}(:,2);
         TminYearTot(:,sc+1)=TminYearTots{1,sc}(:,2);
-        TmaxYearTot(:,sc+1)=TminYearTots{1,sc}(:,2);
+        TmaxYearTot(:,sc+1)=TmaxYearTots{1,sc}(:,2);
 
         EToMonthTot(:,sc+2)=EToMonthTots{1,sc}(:,3);
         RainMonthTot(:,sc+2)=RainMonthTots{1,sc}(:,3);
@@ -316,3 +316,13 @@ f=figure('name','Summer statistics')
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 6. ANALYZE MEAN CHANGES
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+MeanYear=[EToStatsYear(1,:);RainStatsYear(1,:);AridityStatsYear(1,:);TminStatsYear(1,:);TmaxStatsYear(1,:)];
+MeanSummer=[EToStatsSummer(1,:);RainStatsSummer(1,:);AridityStatsSummer(1,:);TminStatsSummer(1,:);TmaxStatsSummer(1,:)];
+MeanWinter=[EToStatsWinter(1,:);RainStatsWinter(1,:);AridityStatsWinter(1,:);TminStatsWinter(1,:);TmaxStatsWinter(1,:)];
+
+for i=1:nscen
+    MeanChangeYear(:,i)=MeanYear(:,i)-MeanYear(:,1);
+    MeanChangeSummer(:,i)=MeanSummer(:,i)-MeanSummer(:,1);
+    MeanChangeWinter(:,i)=MeanWinter(:,i)-MeanWinter(:,1);
+end
