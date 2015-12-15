@@ -204,7 +204,7 @@ TmaxStatsYear(5,1:nscen)=max(TmaxYearTot(:,2:nscen+1));
 AridityStatsYear(5,1:nscen)=min(AridityYearTot(:,2:nscen+1));
 
 %VIZUALIZE
-f=figure('name','Yearly statistics')
+figure('name','Yearly statistics')
     subplot(5,1,1, 'fontsize',10);%ETo
         boxplot(EToYearTot(:,2:nscen+1),'labels',NameMat)
         ylabel('Annual ETo (mm/year)')
@@ -232,8 +232,6 @@ f=figure('name','Yearly statistics')
         line (xlim, [TmaxStatsYear(3,1),TmaxStatsYear(3,1)],'LineStyle','--','Color','k')
         xlabel('Climate Scenario')
         ylabel('Yearly average of Tmax (°C)')
-    annotation(f,'line',[0.18 0.18],[0.92 0.10])
-    annotation(f,'line',[0.615 0.615],[0.92 0.10])
     
 % 5.2 WINTER SEASON
 %--------------------------------------------------------------------------
@@ -275,7 +273,7 @@ TmaxStatsWinter(5,1:nscen)=max(TmaxWinter(:,3:nscen+2));
 AridityStatsWinter(5,1:nscen)=max(AridityWinter(:,3:nscen+2));
 
 % VIZUALIZE
-f=figure('name','Winter statistics')
+figure('name','Winter statistics')
     subplot(5,1,1, 'fontsize',10);%ETo
         boxplot(EToWinter(:,3:nscen+2),'labels',NameMat)
         hold on
@@ -303,8 +301,6 @@ f=figure('name','Winter statistics')
         line (xlim, [TmaxStatsWinter(3,1),TmaxStatsWinter(3,1)],'LineStyle','--','Color','k')
         xlabel('Climate Scenario')
         ylabel('Seasonal average of Tmax (°C)')
-        annotation(f,'line',[0.18 0.18],[0.92 0.10])
-        annotation(f,'line',[0.615 0.615],[0.92 0.10])
 
 % 5.3 SUMMER SEASON
 %--------------------------------------------------------------------------
@@ -370,12 +366,9 @@ f=figure('name','Summer statistics')
         ylabel('Seasonal average of Tmin (°C)')
     subplot(5,1,5, 'fontsize',10);%Tmax
         boxplot(TmaxSummer(:,3:nscen+2),'labels',NameMat)
-        hold on
-        line (xlim, [TmaxStatsSummer(3,1),TmaxStatsSummer(3,1)],'LineStyle','--','Color','k')        
         xlabel('Climate Scenario')
         ylabel('Seasonal average of Tmax (°C)')
-    annotation(f,'line',[0.18 0.18],[0.92 0.10])
-    annotation(f,'line',[0.615 0.615],[0.92 0.10])
+    annotation(f,'line',[0.18 0.18],[0.91 0.10])
 
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 6. ANALYZE MEANS 
