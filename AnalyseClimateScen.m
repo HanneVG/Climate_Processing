@@ -93,7 +93,7 @@ clear new i EToFut RainFut TminFut TmaxFut EToHist RainHist TminHist TmaxHist nF
     RainYearTot(:,1)=RainYearTots{1,1}(:,1);
     TminYearTot(:,1)=TminYearTots{1,1}(:,1);
     TmaxYearTot(:,1)=TmaxYearTots{1,1}(:,1);
-
+       
     EToMonthTot(:,1:2)=EToMonthTots{1,1}(:,1:2); % Write year & month in first two colums
     RainMonthTot(:,1:2)=RainMonthTots{1,1}(:,1:2);
     TminMonthTot(:,1:2)=TminMonthTots{1,1}(:,1:2);
@@ -109,7 +109,7 @@ clear new i EToFut RainFut TminFut TmaxFut EToHist RainHist TminHist TmaxHist nF
         RainYearTot(:,sc+1)=RainYearTots{1,sc}(:,2);
         TminYearTot(:,sc+1)=TminYearTots{1,sc}(:,2);
         TmaxYearTot(:,sc+1)=TmaxYearTots{1,sc}(:,2);
-
+        
         EToMonthTot(:,sc+2)=EToMonthTots{1,sc}(:,3);
         RainMonthTot(:,sc+2)=RainMonthTots{1,sc}(:,3);
         TminMonthTot(:,sc+2)=TminMonthTots{1,sc}(:,3);
@@ -130,12 +130,41 @@ AridityYearTot(:,2:nscen+1)= RainYearTot(:,2:nscen+1)./EToYearTot(:,2:nscen+1); 
 AridityMonthTot(:,3:nscen+2)= RainMonthTot(:,3:nscen+2)./EToMonthTot(:,3:nscen+2);
 AriditySeasonTot(:,3:nscen+2)=  RainSeasonTot(:,3:nscen+2)./EToSeasonTot(:,3:nscen+2); 
     
+% mean monthy values over all years
+EToMonthAvg(1:12,1)=1:12;
+RainMonthAvg(1:12,1)=1:12;
+TminMonthAvg(1:12,1)=1:12;
+TmaxMonthAvg(1:12,1)=1:12;
+
+EToMonthMed(1:12,1)=1:12;
+RainMonthMed(1:12,1)=1:12;
+TminMonthMed(1:12,1)=1:12;
+TmaxMonthmed(1:12,1)=1:12;
+
+for m=1:12 % loop trough all months
+    EToM=EToMonthTot(EToMonthTot(:,2)==m,:);
+    RainM=RainMonthTot(RainMonthTot(:,2)==m,:);
+    TminM=TminMonthTot(TminMonthTot(:,2)==m,:);
+    TmaxM=TmaxMonthTot(TmaxMonthTot(:,2)==m,:);
     
+    EToMonthAvg(m,2:nscen+1)=mean(EToM(:,3:nscen+2));
+    RainMonthAvg(m,2:nscen+1)=mean(RainM(:,3:nscen+2));
+    TminMonthAvg(m,2:nscen+1)=mean(TminM(:,3:nscen+2));
+    TmaxMonthAvg(m,2:nscen+1)=mean(TmaxM(:,3:nscen+2));
+    
+    EToMonthMed(m,2:nscen+1)=median(EToM(:,3:nscen+2));
+    RainMonthMed(m,2:nscen+1)=median(RainM(:,3:nscen+2));
+    TminMonthMed(m,2:nscen+1)=median(TminM(:,3:nscen+2));
+    TmaxMonthMed(m,2:nscen+1)=median(TmaxM(:,3:nscen+2));
+    
+end
+
 clear sc 
 clear EToYearTots EToMonthTots EToSeasonTots
-clear RainYearTots RainMonthTots RainSeasonTots
+clear RainYearTots  RainMonthTots RainSeasonTots
 clear TminYearTots TminMonthTots TminSeasonTots
 clear TmaxYearTots TmaxMonthTots TmaxSeasonTots
+clear EToM RainM TminM TmaxM
 
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 5. CALCULATE STATS & VIZUALIZE
@@ -314,9 +343,11 @@ f=figure('name','Summer statistics')
     annotation(f,'line',[0.18 0.18],[0.91 0.10])
 
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% 6. ANALYZE MEAN CHANGES
+% 6. ANALYZE MEANS 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+% 6.1 MEAN CHANGES
+%-------------------------------------------------------------------------
 MeanYear=[EToStatsYear(1,:);RainStatsYear(1,:);AridityStatsYear(1,:);TminStatsYear(1,:);TmaxStatsYear(1,:)];
 MeanSummer=[EToStatsSummer(1,:);RainStatsSummer(1,:);AridityStatsSummer(1,:);TminStatsSummer(1,:);TmaxStatsSummer(1,:)];
 MeanWinter=[EToStatsWinter(1,:);RainStatsWinter(1,:);AridityStatsWinter(1,:);TminStatsWinter(1,:);TmaxStatsWinter(1,:)];
@@ -326,3 +357,125 @@ for i=1:nscen
     MeanChangeSummer(:,i)=MeanSummer(:,i)-MeanSummer(:,1);
     MeanChangeWinter(:,i)=MeanWinter(:,i)-MeanWinter(:,1);
 end
+
+% 6.1 MEAN MONTHLY VALUE
+%-------------------------------------------------------------------------
+figure('name','Monthly ETo averages')
+    subplot(2,1,1, 'fontsize',10);%RCP8.5
+        P=plot(EToMonthAvg(:,1),EToMonthAvg(:,2),EToMonthAvg(:,1),EToMonthMed(:,2));
+        set(P,{'LineStyle'},{'-';'--'})
+        set(P,{'Color'},{'k';'k'})
+        set(P,{'LineWidth'},{1.5;1.5}) 
+        hold on
+        plot(EToMonthAvg(:,1),EToMonthAvg(:,3:11));
+        xlabel('Month','fontsize',10);
+        ylabel('Average Monthly ETo (mm)','fontsize',10);
+        axisy=ylim;
+        axis([0,13,axisy(1,1),axisy(1,2)]);
+        ax=gca;
+        ax.XTick=1:12;
+        title('RCP 8.5');
+    subplot(2,1,2, 'fontsize',10);%RCP4.5
+        P=plot(EToMonthAvg(:,1),EToMonthAvg(:,2),EToMonthAvg(:,1),EToMonthMed(:,2));
+        set(P,{'LineStyle'},{'-';'--'})
+        set(P,{'Color'},{'k';'k'})
+        set(P,{'LineWidth'},{1.5;1.5})   
+        hold on
+        plot(EToMonthAvg(:,1),EToMonthAvg(:,12:nscen+1));
+        xlabel('Month','fontsize',10);
+        ylabel('Average Monthly ETo (mm)','fontsize',10);
+        axisy=ylim;
+        axis([0,13,axisy(1,1),axisy(1,2)]);
+        ax=gca;
+        ax.XTick=1:12;
+        title('RCP 4.5');        
+
+figure('name','Monthly Rainfall averages')
+    subplot(2,1,1, 'fontsize',10);%RCP8.5
+        P=plot(RainMonthAvg(:,1),RainMonthAvg(:,2),RainMonthAvg(:,1),RainMonthMed(:,2));
+        set(P,{'LineStyle'},{'-';'--'})
+        set(P,{'Color'},{'k';'k'})
+        set(P,{'LineWidth'},{1.5;1.5})    
+        hold on
+        plot(RainMonthAvg(:,1),RainMonthAvg(:,3:11));
+        xlabel('Month','fontsize',10);
+        ylabel('Average Monthly Rain (mm)','fontsize',10);
+        axisy=ylim;
+        axis([0,13,axisy(1,1),axisy(1,2)]);
+        ax=gca;
+        ax.XTick=1:12;
+        title('RCP 8.5');
+    subplot(2,1,2, 'fontsize',10);%RCP4.5
+        P=plot(RainMonthAvg(:,1),RainMonthAvg(:,2),RainMonthAvg(:,1),RainMonthMed(:,2));
+        set(P,{'LineStyle'},{'-';'--'})
+        set(P,{'Color'},{'k';'k'})
+        set(P,{'LineWidth'},{1.5;1.5})   
+        hold on
+        plot(RainMonthAvg(:,1),RainMonthAvg(:,12:nscen+1));
+        xlabel('Month','fontsize',10);
+        ylabel('Average Monthly Rain (mm)','fontsize',10);
+        axisy=ylim;
+        axis([0,13,axisy(1,1),axisy(1,2)]);
+        ax=gca;
+        ax.XTick=1:12;
+        title('RCP 4.5');     
+       
+ figure('name','Monthly average Tmin')
+    subplot(2,1,1, 'fontsize',10);%RCP8.5
+        P=plot(TminMonthAvg(:,1),TminMonthAvg(:,2),TminMonthAvg(:,1),TminMonthMed(:,2));
+        set(P,{'LineStyle'},{'-';'--'})
+        set(P,{'Color'},{'k';'k'})
+        set(P,{'LineWidth'},{1.5;1.5})      
+        hold on
+        plot(TminMonthAvg(:,1),TminMonthAvg(:,3:11));
+        xlabel('Month','fontsize',10);
+        ylabel('Monthly average Tmin (°C)','fontsize',10);
+        axisy=ylim;
+        axis([0,13,axisy(1,1),axisy(1,2)]);
+        ax=gca;
+        ax.XTick=1:12;
+        title('RCP 8.5');
+    subplot(2,1,2, 'fontsize',10);%RCP4.5
+        P=plot(TminMonthAvg(:,1),TminMonthAvg(:,2),TminMonthAvg(:,1),TminMonthMed(:,2));
+        set(P,{'LineStyle'},{'-';'--'})
+        set(P,{'Color'},{'k';'k'})
+        set(P,{'LineWidth'},{1.5;1.5})     
+        hold on
+        plot(TminMonthAvg(:,1),TminMonthAvg(:,12:nscen+1));
+        xlabel('Month','fontsize',10);
+        ylabel('Monthly average Tmin (°C)','fontsize',10);
+        axisy=ylim;
+        axis([0,13,axisy(1,1),axisy(1,2)]);
+        ax=gca;
+        ax.XTick=1:12;
+        title('RCP 4.5');        
+
+figure('name','Monthly average Tmax')
+    subplot(2,1,1, 'fontsize',10);%RCP8.5
+        P=plot(TmaxMonthAvg(:,1),TmaxMonthAvg(:,2),TmaxMonthAvg(:,1),TmaxMonthMed(:,2));
+        set(P,{'LineStyle'},{'-';'--'})
+        set(P,{'Color'},{'k';'k'})
+        set(P,{'LineWidth'},{1.5;1.5})   
+        hold on
+        plot(TmaxMonthAvg(:,1),TmaxMonthAvg(:,3:11));
+        xlabel('Month','fontsize',10);
+        ylabel('Monthly average Tmax (°C)','fontsize',10);
+        axisy=ylim;
+        axis([0,13,axisy(1,1),axisy(1,2)]);
+        ax=gca;
+        ax.XTick=1:12;
+        title('RCP 8.5');
+    subplot(2,1,2, 'fontsize',10);%RCP4.5
+        P=plot(TmaxMonthAvg(:,1),TmaxMonthAvg(:,2),TmaxMonthAvg(:,1),TmaxMonthMed(:,2));
+        set(P,{'LineStyle'},{'-';'--'})
+        set(P,{'Color'},{'k';'k'})
+        set(P,{'LineWidth'},{1.5;1.5})      
+        hold on
+        plot(TmaxMonthAvg(:,1),TmaxMonthAvg(:,12:nscen+1));
+        xlabel('Month','fontsize',10);
+        ylabel('Monthly average Tmax (°C)','fontsize',10);
+        axisy=ylim;
+        axis([0,13,axisy(1,1),axisy(1,2)]);
+        ax=gca;
+        ax.XTick=1:12;
+        title('RCP 4.5');          
