@@ -393,8 +393,9 @@ for i=1:nscen
     MeanChangeWinter(:,i)=MeanWinter(:,i)-MeanWinter(:,1);
 end
 
-% 6.1 MEAN MONTHLY VALUE
+% 6.2 MEAN MONTHLY VALUE
 %-------------------------------------------------------------------------
+
 figure('name','Monthly ETo averages')
     subplot(2,1,1, 'fontsize',10);%RCP8.5
         P=plot(EToMonthAvg(:,1),EToMonthAvg(:,2),EToMonthAvg(:,1),EToMonthMed(:,2));
@@ -514,3 +515,134 @@ figure('name','Monthly average Tmax')
         ax=gca;
         ax.XTick=1:12;
         title('RCP 4.5');          
+
+% 6.3 MEAN MONTHLY VALUE ALL (GREYSCALE)
+%-------------------------------------------------------------------------
+GreyCol='[0.6 0.6 0.6]';
+
+figure('name','Monthly averages')
+    subplot(4,2,1, 'fontsize',10);%Rain RCP8.5
+        P=plot(RainMonthAvg(:,1),RainMonthAvg(:,3:11));
+        set(P,{'Color'},{GreyCol;GreyCol;GreyCol;GreyCol;GreyCol;GreyCol;GreyCol;GreyCol;GreyCol})
+        hold on
+        P=plot(RainMonthAvg(:,1),RainMonthAvg(:,2));
+        set(P,{'LineStyle'},{'-'})
+        set(P,{'Color'},{'k'})
+        set(P,{'LineWidth'},{1.5})    
+        xlabel('Month','fontsize',8);
+        ylabel('Average Monthly Rain (mm)','fontsize',8);
+        axisy=ylim;
+        axis([1,12,axisy(1,1),150]);
+        ax=gca;
+        ax.XTick=1:12;
+        set(gca,'box','off')
+        title('RCP 8.5');
+    subplot(4,2,2, 'fontsize',10);%Rain RCP4.5
+        P=plot(RainMonthAvg(:,1),RainMonthAvg(:,12:nscen+1));
+        set(P,{'Color'},{GreyCol;GreyCol;GreyCol;GreyCol;GreyCol;GreyCol})
+        hold on
+        P=plot(RainMonthAvg(:,1),RainMonthAvg(:,2));
+        set(P,{'LineStyle'},{'-'})
+        set(P,{'Color'},{'k'})
+        set(P,{'LineWidth'},{1.5})          
+        xlabel('Month','fontsize',8);
+        ylabel('Average Monthly Rain (mm)','fontsize',8);
+        axisy=ylim;
+        axis([1,12,axisy(1,1),150]);
+        ax=gca;
+        ax.XTick=1:12;
+        set(gca,'box','off')
+        title('RCP 4.5');
+        
+    subplot(4,2,3, 'fontsize',10);%ETo RCP8.5   
+        P=plot(EToMonthAvg(:,1),EToMonthAvg(:,3:11));
+        set(P,{'Color'},{GreyCol;GreyCol;GreyCol;GreyCol;GreyCol;GreyCol;GreyCol;GreyCol;GreyCol})       
+        hold on
+        P=plot(EToMonthAvg(:,1),EToMonthAvg(:,2));
+        set(P,{'LineStyle'},{'-'})
+        set(P,{'Color'},{'k'})
+        set(P,{'LineWidth'},{1.5}) 
+        xlabel('Month','fontsize',8);
+        ylabel('Average Monthly ETo (mm)','fontsize',8);
+        axisy=ylim;
+        axis([1,12,axisy(1,1),150]);
+        ax=gca;
+        ax.XTick=1:12;  
+        set(gca,'box','off')
+     subplot(4,2,4, 'fontsize',10);%ETo RCP4.5
+        P=plot(EToMonthAvg(:,1),EToMonthAvg(:,12:nscen+1));  
+        set(P,{'Color'},{GreyCol;GreyCol;GreyCol;GreyCol;GreyCol;GreyCol})
+        hold on
+        P=plot(EToMonthAvg(:,1),EToMonthAvg(:,2));
+        set(P,{'LineStyle'},{'-'})
+        set(P,{'Color'},{'k'})
+        set(P,{'LineWidth'},{1.5})   
+        xlabel('Month','fontsize',8);
+        ylabel('Average Monthly ETo (mm)','fontsize',8);
+        axisy=ylim;
+        axis([1,12,axisy(1,1),150]);
+        ax=gca;
+        ax.XTick=1:12;    
+        set(gca,'box','off')
+        
+    subplot(4,2,5, 'fontsize',10);%Tmin RCP8.5
+        P=plot(TminMonthAvg(:,1),TminMonthAvg(:,3:11));
+        set(P,{'Color'},{GreyCol;GreyCol;GreyCol;GreyCol;GreyCol;GreyCol;GreyCol;GreyCol;GreyCol})
+        hold on
+        P=plot(TminMonthAvg(:,1),TminMonthAvg(:,2));
+        set(P,{'LineStyle'},{'-'})
+        set(P,{'Color'},{'k'})
+        set(P,{'LineWidth'},{1.5})      
+        xlabel('Month','fontsize',8);
+        ylabel('Monthly average Tmin (°C)','fontsize',8);
+        axisy=ylim;
+        axis([1,12,axisy(1,1),axisy(1,2)]);
+        ax=gca;
+        ax.XTick=1:12;
+        set(gca,'box','off')       
+    subplot(4,2,6, 'fontsize',10);% Tmin RCP4.5
+        P=plot(TminMonthAvg(:,1),TminMonthAvg(:,12:nscen+1));
+        set(P,{'Color'},{GreyCol;GreyCol;GreyCol;GreyCol;GreyCol;GreyCol})
+        hold on
+        P=plot(TminMonthAvg(:,1),TminMonthAvg(:,2));
+        set(P,{'LineStyle'},{'-'})
+        set(P,{'Color'},{'k'})
+        set(P,{'LineWidth'},{1.5})     
+        xlabel('Month','fontsize',8);
+        ylabel('Monthly average Tmin (°C)','fontsize',8);
+        axisy=ylim;
+        axis([1,12,axisy(1,1),axisy(1,2)]);
+        ax=gca;
+        ax.XTick=1:12;      
+        set(gca,'box','off')
+        
+    subplot(4,2,7, 'fontsize',10);%Tmax - RCP8.5
+        P=plot(TmaxMonthAvg(:,1),TmaxMonthAvg(:,3:11));
+        set(P,{'Color'},{GreyCol;GreyCol;GreyCol;GreyCol;GreyCol;GreyCol;GreyCol;GreyCol;GreyCol})
+        hold on 
+        P=plot(TmaxMonthAvg(:,1),TmaxMonthAvg(:,2));
+        set(P,{'LineStyle'},{'-'})
+        set(P,{'Color'},{'k'})
+        set(P,{'LineWidth'},{1.5})   
+        xlabel('Month','fontsize',8);
+        ylabel('Monthly average Tmax (°C)','fontsize',8);
+        axisy=ylim;
+        axis([1,12,axisy(1,1),30]);
+        ax=gca;
+        ax.XTick=1:12;
+        set(gca,'box','off')        
+    subplot(4,2,8, 'fontsize',10);%Tmax - RCP4.5
+        P=plot(TmaxMonthAvg(:,1),TmaxMonthAvg(:,12:nscen+1));
+        set(P,{'Color'},{GreyCol;GreyCol;GreyCol;GreyCol;GreyCol;GreyCol})
+        hold on
+        P=plot(TmaxMonthAvg(:,1),TmaxMonthAvg(:,2));
+        set(P,{'LineStyle'},{'-'})
+        set(P,{'Color'},{'k'})
+        set(P,{'LineWidth'},{1.5})      
+         xlabel('Month','fontsize',8);
+        ylabel('Monthly average Tmax (°C)','fontsize',8);
+        axisy=ylim;
+        axis([1,12,axisy(1,1),30]);
+        ax=gca;
+        ax.XTick=1:12;
+         set(gca,'box','off')
