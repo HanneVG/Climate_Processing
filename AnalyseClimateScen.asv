@@ -203,7 +203,7 @@ TmaxStatsYear(5,1:nscen)=max(TmaxYearTot(:,2:nscen+1));
 AridityStatsYear(5,1:nscen)=min(AridityYearTot(:,2:nscen+1));
 
 %VIZUALIZE
-f1=figure('name','Yearly statistics');
+f1=figure('name','Yearly statistics')
     subplot(5,1,1, 'fontsize',10);%ETo
         boxplot(EToYearTot(:,2:nscen+1),'labels',NameMat)
         ylabel('Annual ETo (mm/year)')
@@ -275,7 +275,7 @@ TmaxStatsWinter(5,1:nscen)=max(TmaxWinter(:,3:nscen+2));
 AridityStatsWinter(5,1:nscen)=max(AridityWinter(:,3:nscen+2));
 
 % VIZUALIZE
-f2=figure('name','Winter statistics');
+f2=figure('name','Winter statistics')
     subplot(5,1,1, 'fontsize',10);%ETo
         boxplot(EToWinter(:,3:nscen+2),'labels',NameMat)
         hold on
@@ -346,7 +346,7 @@ TmaxStatsSummer(5,1:nscen)=max(TmaxSummer(:,3:nscen+2));
 AridityStatsSummer(5,1:nscen)=max(AriditySummer(:,3:nscen+2));
 
 % VIZUALIZE
-f3=figure('name','Summer statistics');
+f3=figure('name','Summer statistics')
     subplot(5,1,1, 'fontsize',10);%ETo
         boxplot(EToSummer(:,3:nscen+2),'labels',NameMat)
         hold on
@@ -396,7 +396,7 @@ end
 % 6.2 MEAN MONTHLY VALUE
 %-------------------------------------------------------------------------
 
-f4=figure('name','Monthly ETo averages');
+f4=figure('name','Monthly ETo averages')
     subplot(2,1,1, 'fontsize',10);%RCP8.5
         P=plot(EToMonthAvg(:,1),EToMonthAvg(:,2),EToMonthAvg(:,1),EToMonthMed(:,2));
         set(P,{'LineStyle'},{'-';'--'})
@@ -426,7 +426,7 @@ f4=figure('name','Monthly ETo averages');
         ax.XTick=1:12;
         title('RCP 4.5');        
 
-f5=figure('name','Monthly Rainfall averages');
+f5=figure('name','Monthly Rainfall averages')
     subplot(2,1,1, 'fontsize',10);%RCP8.5
         P=plot(RainMonthAvg(:,1),RainMonthAvg(:,2),RainMonthAvg(:,1),RainMonthMed(:,2));
         set(P,{'LineStyle'},{'-';'--'})
@@ -456,7 +456,7 @@ f5=figure('name','Monthly Rainfall averages');
         ax.XTick=1:12;
         title('RCP 4.5');     
        
- f6=figure('name','Monthly average Tmin');
+ f6=figure('name','Monthly average Tmin')
     subplot(2,1,1, 'fontsize',10);%RCP8.5
         P=plot(TminMonthAvg(:,1),TminMonthAvg(:,2),TminMonthAvg(:,1),TminMonthMed(:,2));
         set(P,{'LineStyle'},{'-';'--'})
@@ -486,7 +486,7 @@ f5=figure('name','Monthly Rainfall averages');
         ax.XTick=1:12;
         title('RCP 4.5');        
 
-f7=figure('name','Monthly average Tmax');
+f7=figure('name','Monthly average Tmax')
     subplot(2,1,1, 'fontsize',10);%RCP8.5
         P=plot(TmaxMonthAvg(:,1),TmaxMonthAvg(:,2),TmaxMonthAvg(:,1),TmaxMonthMed(:,2));
         set(P,{'LineStyle'},{'-';'--'})
@@ -520,7 +520,7 @@ f7=figure('name','Monthly average Tmax');
 %-------------------------------------------------------------------------
 GreyCol='[0.6 0.6 0.6]';
 
-f8=figure('name','Monthly averages');
+f8=figure('name','Monthly averages')
     subplot(4,2,1, 'fontsize',10);%Rain RCP8.5
         P=plot(RainMonthAvg(:,1),RainMonthAvg(:,3:11));
         set(P,{'Color'},{GreyCol;GreyCol;GreyCol;GreyCol;GreyCol;GreyCol;GreyCol;GreyCol;GreyCol})
@@ -655,34 +655,34 @@ f8=figure('name','Monthly averages');
     DatapathOutput=uigetdir('C:\','Select directory to store output of climate scenario comparison');
 
 % save figures
-filename='Yearly climate statistics';
+filename='Yearly statistics';
 filename=fullfile(DatapathOutput,filename);
 savefig(f1,filename)         
 
-filename='Winter climate statistics';
-filename=fullfile(DatapathOutput,filename);
+filename='Winter statistics';
+filename=fullfile(DatapathScenOut,filename);
 savefig(f2,filename)   
 
-filename='Summer climate statistics';
-filename=fullfile(DatapathOutput,filename);
+filename='Summer statistics';
+filename=fullfile(DatapathScenOut,filename);
 savefig(f3,filename)   
 
 % filename='Monthly ETo averages';
-% filename=fullfile(DatapathOutput,filename);
+% filename=fullfile(DatapathScenOut,filename);
 % savefig(f4,filename)   
 % 
 % filename='Monthly Rainfall averages';
-% filename=fullfile(DatapathOutput,filename);
+% filename=fullfile(DatapathScenOut,filename);
 % savefig(f5,filename)
 % 
 % filename='Monthly average Tmin';
-% filename=fullfile(DatapathOutput,filename);
+% filename=fullfile(DatapathScenOut,filename);
 % savefig(f6,filename)   
 % 
 % filename='Monthly average Tmax';
-% filename=fullfile(DatapathOutput,filename);
+% filename=fullfile(DatapathScenOut,filename);
 % savefig(f7,filename)
 
-filename='Monthly averages clim par';
-filename=fullfile(DatapathOutput,filename);
+filename='Monthly averages all';
+filename=fullfile(DatapathScenOut,filename);
 savefig(f8,filename)
