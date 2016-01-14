@@ -12,6 +12,9 @@
 % 1. DEFINE DATAPATH 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+% specify in which path all perturbed climate files are stored
+DatapathIn=uigetdir('C:\','Select directory with perturbed climate series');
+
 % specify the path with the excelfile where output should be stored
 DatapathOut=uigetdir('C:\','Select directory to store excel output file of generated climate');
 
@@ -23,7 +26,7 @@ DatapathOut2=uigetdir('C:\','Select directory to store AquaCrop files of generat
 % 1. READ IN CLIMATE FILES  
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-[EToAll,RainfallAll,TminAll,TmaxAll,nfile]= ReadPertSeries();
+[EToAll,RainfallAll,TminAll,TmaxAll,nfile]= ReadPertSeries(DatapathIn);
 
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 3. WRITE MATRIXES TO EXCEL

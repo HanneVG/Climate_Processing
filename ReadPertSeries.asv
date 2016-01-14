@@ -263,7 +263,6 @@ end
 Datafile=dir(fullfile(Datapath,'max_temperature*.txt'));
 if isempty(Datafile)==1
     TmaxAll=NaN;
-    nfile=NaN;
 else
     %order these files according to there number 
         %convert to matrix
