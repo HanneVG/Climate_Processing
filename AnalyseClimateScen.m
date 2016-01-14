@@ -4,7 +4,7 @@
 % and analyses & vizualizes climate characteristics
 %
 % TO DO before running script
-%   - Give each scenario you run a name in 'NameMat'
+%   - Give each scenario you run a name in variable 'NameMat'
 %
 %
 % Author: Hanne Van Gaelen
@@ -49,8 +49,11 @@ clear fid filenamefull ans DatapathHist
 
 %1.1 Read in Future climate data (output of the perturbation tool)
 %-------------------------------------------------------------------------
+% specify in which path all perturbed climate files are stored
+Datapathpert=uigetdir('C:\','Select directory with perturbed climate series');
+
 % climate data
-[EToFut,RainFut,TminFut,TmaxFut,nFut]=ReadPertSeries();
+[EToFut,RainFut,TminFut,TmaxFut,nFut]=ReadPertSeries(Datapathpert);
 
 % generate time data
 Start=datetime(2035,1,1);       % Start date 
@@ -141,7 +144,7 @@ TmaxMonthAvg(1:12,1)=1:12;
 EToMonthMed(1:12,1)=1:12;
 RainMonthMed(1:12,1)=1:12;
 TminMonthMed(1:12,1)=1:12;
-TmaxMonthmed(1:12,1)=1:12;
+TmaxMonthMed(1:12,1)=1:12;
 
 for m=1:12 % loop trough all months
     EToM=EToMonthTot(EToMonthTot(:,2)==m,:);
@@ -527,14 +530,94 @@ f8=figure('name','Monthly averages');
         ax.XTick=1:12;
         set(gca,'box','off')        
 
+% 6.4 MEDIAN MONTHLY VALUE ALL (GREYSCALE)
+%-------------------------------------------------------------------------
+GreyCol='[0.6 0.6 0.6]';
+colorstruct=cell(nscen-1,1);
+for i=1:nscen-1
+    colorstruct(i,1)={GreyCol};
+end
+
+f9=figure('name','Monthly medians');
+    subplot(2,2,1, 'fontsize',10);%Rain RCP8.5
+        P=plot(RainMonthMed(:,1),RainMonthMed(:,3:nscen+1));
+        set(P,{'Color'},colorstruct)
+        hold on
+        P=plot(RainMonthMed(:,1),RainMonthMed(:,2));
+        set(P,{'LineStyle'},{'-'})
+        set(P,{'Color'},{'k'})
+        set(P,{'LineWidth'},{1.5})    
+        xlabel('Month','fontsize',8);
+        ylabel('Median total monthly rain (mm)','fontsize',8);
+        axisy=ylim;
+        axis([1,12,axisy(1,1),150]);
+        ax=gca;
+        ax.XTick=1:12;
+        set(gca,'box','off')
+
+    subplot(2,2,2, 'fontsize',10);%ETo RCP8.5   
+        P=plot(EToMonthMed(:,1),EToMonthMed(:,3:nscen+1));
+        set(P,{'Color'},colorstruct)       
+        hold on
+        P=plot(EToMonthMed(:,1),EToMonthMed(:,2));
+        set(P,{'LineStyle'},{'-'})
+        set(P,{'Color'},{'k'})
+        set(P,{'LineWidth'},{1.5}) 
+        xlabel('Month','fontsize',8);
+        ylabel('Median total monthly ETo (mm)','fontsize',8);
+        axisy=ylim;
+        axis([1,12,axisy(1,1),150]);
+        ax=gca;
+        ax.XTick=1:12;  
+        set(gca,'box','off')
+        
+    subplot(2,2,3, 'fontsize',10);%Tmin RCP8.5
+        P=plot(TminMonthMed(:,1),TminMonthMed(:,3:nscen+1));
+        set(P,{'Color'},colorstruct)
+        hold on
+        P=plot(TminMonthMed(:,1),TminMonthMed(:,2));
+        set(P,{'LineStyle'},{'-'})
+        set(P,{'Color'},{'k'})
+        set(P,{'LineWidth'},{1.5})      
+        xlabel('Month','fontsize',8);
+        ylabel('Median monthly average Tmin (°C)','fontsize',8);
+        axisy=ylim;
+        axis([1,12,axisy(1,1),axisy(1,2)]);
+        ax=gca;
+        ax.XTick=1:12;
+        set(gca,'box','off')       
+        
+    subplot(2,2,4, 'fontsize',10);%Tmax - RCP8.5
+        P=plot(TmaxMonthMed(:,1),TmaxMonthMed(:,3:nscen+1));
+        set(P,{'Color'},colorstruct)
+        hold on 
+        P=plot(TmaxMonthMed(:,1),TmaxMonthMed(:,2));
+        set(P,{'LineStyle'},{'-'})
+        set(P,{'Color'},{'k'})
+        set(P,{'LineWidth'},{1.5})   
+        xlabel('Month','fontsize',8);
+        ylabel('Median monthly average Tmax (°C)','fontsize',8);
+        axisy=ylim;
+        axis([1,12,axisy(1,1),30]);
+        ax=gca;
+        ax.XTick=1:12;
+        set(gca,'box','off')        
+
          
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% 7. SAVE THE FIGURES
+% 7. SAVE OUTPUT
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%         
 
 % Define datapath to save figures & other output 
     DatapathOutput=uigetdir('C:\','Select directory to store output of climate scenario comparison');
 
+    
+% medians year/summer/winter
+YearMedian=[EToStatsYear(3,:);RainStatsYear(3,:);AridityStatsYear(3,:);TminStatsYear(3,:);TmaxStatsYear(3,:)];
+SummerMedian=[EToStatsSummer(3,:);RainStatsSummer(3,:);AridityStatsSummer(3,:);TminStatsSummer(3,:);TmaxStatsSummer(3,:)];    
+WinterMedian=[EToStatsWinter(3,:);RainStatsWinter(3,:);AridityStatsWinter(3,:);TminStatsWinter(3,:);TmaxStatsWinter(3,:)];  
+    
+    
 % save figures
 filename='Yearly climate statistics';
 filename=fullfile(DatapathOutput,filename);
@@ -567,3 +650,10 @@ savefig(f3,filename)
 filename='Monthly averages clim par';
 filename=fullfile(DatapathOutput,filename);
 savefig(f8,filename)
+
+filename='Monthly median clim par';
+filename=fullfile(DatapathOutput,filename);
+savefig(f9,filename)
+
+
+clear f1 f2 f3 f4 f5 f6 f7 f8 f9
