@@ -8,7 +8,7 @@
 %
 %
 % Author: Hanne Van Gaelen
-% Last Update: 06/01/2015
+% Last Update: 19/01/2015
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -657,3 +657,87 @@ savefig(f9,filename)
 
 
 clear f1 f2 f3 f4 f5 f6 f7 f8 f9
+
+%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 8. EXTRA: ANALYSE EARLY SPRING AVERAGE TEMPERATURE 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+
+% Calculate average temperature 
+
+TavgMat=(TminMat+TmaxMat)/2;
+
+% Define early spring months
+EarlySpringMonth=zeros(length(TimeHist),nscen);
+SpringMonth=zeros(length(TimeHist),nscen);
+SummerMonth=zeros(length(TimeHist),nscen);
+
+TimeScen=repmat(TimeFut,1,nscen);
+TimeScen(:,1)=TimeHist;
+
+for i=1:nscen
+    
+    EarlySpringMonth(month(TimeScen(:,i))==2,i)=1;
+    EarlySpringMonth(month(TimeScen(:,i))==3,i)=1;
+    EarlySpringMonth(month(TimeScen(:,i))==4,i)=1;
+    
+    SpringMonth(month(TimeScen(:,i))==3,i)=1;
+    SpringMonth(month(TimeScen(:,i))==4,i)=1;
+    SpringMonth(month(TimeScen(:,i))==5,i)=1;  
+    
+    SummerMonth(month(TimeScen(:,i))==6,i)=1;
+    SummerMonth(month(TimeScen(:,i))==7,i)=1;
+    SummerMonth(month(TimeScen(:,i))==8,i)=1;     
+    
+end
+
+EarlySpringMonth(EarlySpringMonth==0)=2;
+SpringMonth(SpringMonth==0)=2;
+SummerMonth(SummerMonth==0)=2;
+
+
+% Calculate average over (early) spring or summer months 
+for i=1:nscen 
+T24Avg2{i}=accumarray([year(TimeScen(:,1)),EarlySpringMonth(:,1)],TavgMat(:,i),[],@mean,NaN);
+T35Avg2{i}=accumarray([year(TimeScen(:,1)),SpringMonth(:,1)],TavgMat(:,i),[],@mean,NaN);
+T68Avg2{i}=accumarray([year(TimeScen(:,1)),SummerMonth(:,1)],TavgMat(:,i),[],@mean,NaN);
+end
+
+  for i=1:nscen
+      
+      maxYear=max(year(TimeHist));
+      minYear=min(year(TimeHist));
+      nYear=(maxYear-minYear)+1;
+      
+      T24Avg(:,i)=T24Avg2{1,i}(minYear:maxYear,1);
+      T35Avg(:,i)=T35Avg2{1,i}(minYear:maxYear,1);
+      T68Avg(:,i)=T68Avg2{1,i}(minYear:maxYear,1);
+  end
+      
+
+% Calculate average over all years
+
+T24AvgStat(1,1:nscen)=mean(T24Avg(:,1:nscen));
+T24AvgStat(2,1:nscen)=median(T24Avg(:,1:nscen));
+
+T35AvgStat(1,1:nscen)=mean(T35Avg(:,1:nscen));
+T35AvgStat(2,1:nscen)=median(T35Avg(:,1:nscen));
+
+T68AvgStat(1,1:nscen)=mean(T68Avg(:,1:nscen));
+T68AvgStat(2,1:nscen)=median(T68Avg(:,1:nscen));
+
+for i=1:2
+T24AvgStatDelta(i,1:nscen)=T24AvgStat(i,1:nscen)-T24AvgStat(i,1);
+T35AvgStatDelta(i,1:nscen)=T35AvgStat(i,1:nscen)-T35AvgStat(i,1);
+T68AvgStatDelta(i,1:nscen)=T68AvgStat(i,1:nscen)-T68AvgStat(i,1);
+end
+
+SowingDateChange(1,1:3)={'Maize','Sugarbeet','Forest'};
+SowingDateChange(2,1)={T24AvgStatDelta(1,1:nscen)*3.5};
+SowingDateChange(2,2)={T24AvgStatDelta(1,1:nscen)*3.3};
+SowingDateChange(2,3)={T24AvgStatDelta(1,1:nscen)*6.6};
+
+SowingDateChange(3,1)={mean(SowingDateChange{2,1}(1,2:nscen))};
+SowingDateChange(3,2)={mean(SowingDateChange{2,2}(1,2:nscen))};
+SowingDateChange(3,3)={mean(SowingDateChange{2,3}(1,2:nscen))};
+
+clear i T24Avg2 T35Avg2 T68Avg2 maxYear minYear SpringMonth 
