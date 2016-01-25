@@ -72,7 +72,7 @@ TminMat=[TminHist,cell2mat(TminFut(3,:))];
 TmaxMat=[TmaxHist,cell2mat(TmaxFut(3,:))];
 
 % create matrix with names of all climate scenario 
-NameMat={'Hist', 'Fut1','Fut2','Fut3','Fut4','Fut5','Fut6','Fut9'};
+NameMat={'Hist', 'Fut1','Fut2','Fut3','Fut4','Fut5','Fut6','Fut9','Fut16','Fut17','Fut18','Fut19'};
 
 nscen=length(NameMat); % number of scenarios
 
@@ -461,8 +461,11 @@ f7=figure('name','Monthly average Tmax');
 %-------------------------------------------------------------------------
 GreyCol='[0.6 0.6 0.6]';
 colorstruct=cell(nscen-1,1);
-for i=1:nscen-1
+for i=1:7
     colorstruct(i,1)={GreyCol};
+end
+for i=8:nscen-1
+colorstruct(i,1)={'[1 0 0]'};
 end
 
 f8=figure('name','Monthly averages');
@@ -534,8 +537,11 @@ f8=figure('name','Monthly averages');
 %-------------------------------------------------------------------------
 GreyCol='[0.6 0.6 0.6]';
 colorstruct=cell(nscen-1,1);
-for i=1:nscen-1
+for i=1:7
     colorstruct(i,1)={GreyCol};
+end
+for i=8:nscen-1
+colorstruct(i,1)={'[1 0 0]'};
 end
 
 f9=figure('name','Monthly medians');

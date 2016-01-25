@@ -80,7 +80,7 @@ for futnumb=1:nfile % loop over all climates
 % Txtfile with temperatures (to calculate maturity data with CalcDate
 % script'
 %--------------------------------------------------------------------------     
-    filename=['Fut',num2str(futnumb),'.txt'];
+    filename=['Fut',num2str(futnumb),'Temp.txt'];
     filenamefullOut=fullfile(DatapathOut2, filename); % create empty textfile and open it
     dlmwrite(filenamefullOut,TempMat,'precision','%12.3f' ,'delimiter',' ','newline','pc')  
     
