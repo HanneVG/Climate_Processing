@@ -72,7 +72,8 @@ TminMat=[TminHist,cell2mat(TminFut(3,:))];
 TmaxMat=[TmaxHist,cell2mat(TmaxFut(3,:))];
 
 % create matrix with names of all climate scenario 
-NameMat={'Hist', 'Fut1','Fut2','Fut3','Fut4','Fut5','Fut6','Fut9','Fut16','Fut17','Fut18','Fut19'};
+%NameMat={'Hist', 'Fut1','Fut2','Fut3','Fut4','Fut5','Fut6','Fut9','Hs','Hw','L','M'};
+NameMat={'Hist', 'Fut1','Fut2','Fut3','Fut4','Fut5','Fut6','Fut9'};
 
 nscen=length(NameMat); % number of scenarios
 
@@ -145,12 +146,14 @@ EToMonthMed(1:12,1)=1:12;
 RainMonthMed(1:12,1)=1:12;
 TminMonthMed(1:12,1)=1:12;
 TmaxMonthMed(1:12,1)=1:12;
+AridityMonthMed(1:12,1)=1:12;
 
 for m=1:12 % loop trough all months
     EToM=EToMonthTot(EToMonthTot(:,2)==m,:);
     RainM=RainMonthTot(RainMonthTot(:,2)==m,:);
     TminM=TminMonthTot(TminMonthTot(:,2)==m,:);
     TmaxM=TmaxMonthTot(TmaxMonthTot(:,2)==m,:);
+    AridityM=AridityMonthTot(AridityMonthTot(:,2)==m,:);
     
     EToMonthAvg(m,2:nscen+1)=mean(EToM(:,3:nscen+2));
     RainMonthAvg(m,2:nscen+1)=mean(RainM(:,3:nscen+2));
@@ -161,6 +164,7 @@ for m=1:12 % loop trough all months
     RainMonthMed(m,2:nscen+1)=median(RainM(:,3:nscen+2));
     TminMonthMed(m,2:nscen+1)=median(TminM(:,3:nscen+2));
     TmaxMonthMed(m,2:nscen+1)=median(TmaxM(:,3:nscen+2));
+    AridityMonthMed(m,2:nscen+1)=median(AridityM(:,3:nscen+2));
     
 end
 
@@ -479,8 +483,7 @@ f8=figure('name','Monthly averages');
         set(P,{'LineWidth'},{1.5})    
         xlabel('Month','fontsize',8);
         ylabel('Average Monthly Rain (mm)','fontsize',8);
-        axisy=ylim;
-        axis([1,12,axisy(1,1),150]);
+        axis([1,12,0,150]);
         ax=gca;
         ax.XTick=1:12;
         set(gca,'box','off')
@@ -537,79 +540,120 @@ f8=figure('name','Monthly averages');
 %-------------------------------------------------------------------------
 GreyCol='[0.6 0.6 0.6]';
 colorstruct=cell(nscen-1,1);
+Line={'--',':','-.','-'};
 for i=1:7
     colorstruct(i,1)={GreyCol};
+    linestruct(i,1)={'-'};
 end
 for i=8:nscen-1
 colorstruct(i,1)={'[1 0 0]'};
+linestruct(i,1)=Line(1,i-7);
 end
-
+%%
 f9=figure('name','Monthly medians');
-    subplot(2,2,1, 'fontsize',10);%Rain RCP8.5
+    subplot(4,2,1, 'fontsize',10);%Rain RCP8.5
         P=plot(RainMonthMed(:,1),RainMonthMed(:,3:nscen+1));
         set(P,{'Color'},colorstruct)
+        set(P,{'LineStyle'},linestruct)
         hold on
         P=plot(RainMonthMed(:,1),RainMonthMed(:,2));
         set(P,{'LineStyle'},{'-'})
         set(P,{'Color'},{'k'})
         set(P,{'LineWidth'},{1.5})    
         xlabel('Month','fontsize',8);
-        ylabel('Median total monthly rain (mm)','fontsize',8);
-        axisy=ylim;
-        axis([1,12,axisy(1,1),150]);
+        h=ylabel('Median total monthly rainfall (mm)','fontsize',8);
+        axis([1,12,0,150]);
         ax=gca;
         ax.XTick=1:12;
         set(gca,'box','off')
+        b=ylim;
+        text(1.2,b(1,2)-10,'(a)','HorizontalAlignment','left')
+%         set(h,'Units', 'Normalized')
+%         aa=get(h,'position')
+%         set(h,'position',[aa(1)-0.02,aa(2),aa(3)])
 
-    subplot(2,2,2, 'fontsize',10);%ETo RCP8.5   
+    subplot(4,2,3, 'fontsize',10);%ETo RCP8.5   
         P=plot(EToMonthMed(:,1),EToMonthMed(:,3:nscen+1));
         set(P,{'Color'},colorstruct)       
+        set(P,{'LineStyle'},linestruct)
         hold on
         P=plot(EToMonthMed(:,1),EToMonthMed(:,2));
         set(P,{'LineStyle'},{'-'})
         set(P,{'Color'},{'k'})
         set(P,{'LineWidth'},{1.5}) 
         xlabel('Month','fontsize',8);
-        ylabel('Median total monthly ETo (mm)','fontsize',8);
+        ylabel('Median total monthly ET_{0} (mm)','fontsize',8);
         axisy=ylim;
         axis([1,12,axisy(1,1),150]);
         ax=gca;
         ax.XTick=1:12;  
         set(gca,'box','off')
+        b=ylim;
+        text(1.2,b(1,2)-10,'(b)','HorizontalAlignment','left')
+
+
         
-    subplot(2,2,3, 'fontsize',10);%Tmin RCP8.5
+    subplot(4,2,2, 'fontsize',10);%Tmin RCP8.5
         P=plot(TminMonthMed(:,1),TminMonthMed(:,3:nscen+1));
         set(P,{'Color'},colorstruct)
+        set(P,{'LineStyle'},linestruct)
         hold on
         P=plot(TminMonthMed(:,1),TminMonthMed(:,2));
         set(P,{'LineStyle'},{'-'})
         set(P,{'Color'},{'k'})
         set(P,{'LineWidth'},{1.5})      
         xlabel('Month','fontsize',8);
-        ylabel('Median monthly average Tmin (°C)','fontsize',8);
+        ylabel('Median monthly average T_{min} (°C)','fontsize',8);
         axisy=ylim;
         axis([1,12,axisy(1,1),axisy(1,2)]);
         ax=gca;
         ax.XTick=1:12;
         set(gca,'box','off')       
+        b=ylim;
+        text(1.2,b(1,2)-1.5,'(d)','HorizontalAlignment','left')
         
-    subplot(2,2,4, 'fontsize',10);%Tmax - RCP8.5
+    subplot(4,2,4, 'fontsize',10);%Tmax - RCP8.5
         P=plot(TmaxMonthMed(:,1),TmaxMonthMed(:,3:nscen+1));
         set(P,{'Color'},colorstruct)
+        set(P,{'LineStyle'},linestruct)
         hold on 
         P=plot(TmaxMonthMed(:,1),TmaxMonthMed(:,2));
         set(P,{'LineStyle'},{'-'})
         set(P,{'Color'},{'k'})
         set(P,{'LineWidth'},{1.5})   
         xlabel('Month','fontsize',8);
-        ylabel('Median monthly average Tmax (°C)','fontsize',8);
+        ylabel('Median monthly average T_{max} (°C)','fontsize',8);
         axisy=ylim;
         axis([1,12,axisy(1,1),30]);
         ax=gca;
         ax.XTick=1:12;
-        set(gca,'box','off')        
-
-         
+        set(gca,'box','off')  
+        b=ylim;
+        text(1.2,b(1,2)-2,'(e)','HorizontalAlignment','left')
+        
+    subplot(4,2,5:6, 'fontsize',10);%Aridity - RCP8.5
+        P=plot(AridityMonthMed(:,1),AridityMonthMed(:,3:nscen+1));
+        set(P,{'Color'},colorstruct)
+        set(P,{'LineStyle'},linestruct)
+        hold on 
+        P=plot(AridityMonthMed(:,1),AridityMonthMed(:,2));
+        set(P,{'LineStyle'},{'-'})
+        set(P,{'Color'},{'k'})
+        set(P,{'LineWidth'},{1.5})   
+        xlabel('Month','fontsize',8);
+        h2=ylabel('Median monthly aridity index (-)','fontsize',8);
+        axis([1,12,0,6]);
+        ax=gca;
+        ax.XTick=1:12;
+        set(gca,'box','off')  
+        b=ylim;
+        text(1.1,b(1,2)-0.5,'(c)','HorizontalAlignment','left')
+        set(h2,'Units', 'Normalized')
+        ab=get(h2,'position')
+        set(h2,'position',[ab(1)-0.02,ab(2),ab(3)])
+        
+        %align_Ylabels(gcf)
+        
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 7. SAVE OUTPUT
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%         
