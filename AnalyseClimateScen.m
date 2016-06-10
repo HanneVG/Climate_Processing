@@ -571,7 +571,7 @@ f9=figure('name','Monthly medians');
         set(P,{'Color'},{'k'})
         set(P,{'LineWidth'},{1.5})    
         xlabel('Month','fontsize',8);
-        ylabel('Median total monthly rainfall (mm)','fontsize',8);
+        ylabel('Median total rainfall (mm)','fontsize',8);
         axis([1,12,0,150]);
         ax=gca;
         ax.XTick=1:12;
@@ -589,7 +589,7 @@ f9=figure('name','Monthly medians');
         set(P,{'Color'},{'k'})
         set(P,{'LineWidth'},{1.5}) 
         xlabel('Month','fontsize',8);
-        ylabel('Median total monthly ET_{0} (mm)','fontsize',8);
+        ylabel('Median total ET_{0} (mm)','fontsize',8);
         axisy=ylim;
         axis([1,12,axisy(1,1),150]);
         ax=gca;
@@ -608,7 +608,7 @@ f9=figure('name','Monthly medians');
         set(P,{'Color'},{'k'})
         set(P,{'LineWidth'},{1.5})      
         xlabel('Month','fontsize',8);
-        ylabel('Median monthly average T_{min} (°C)','fontsize',8);
+        ylabel('Median average T_{min} (°C)','fontsize',8);
         axisy=ylim;
         axis([1,12,axisy(1,1),axisy(1,2)]);
         ax=gca;
@@ -627,7 +627,7 @@ f9=figure('name','Monthly medians');
         set(P,{'Color'},{'k'})
         set(P,{'LineWidth'},{1.5})   
         xlabel('Month','fontsize',8);
-        ylabel('Median monthly average T_{max} (°C)','fontsize',8);
+        ylabel('Median average T_{max} (°C)','fontsize',8);
         axisy=ylim;
         axis([1,12,axisy(1,1),30]);
         ax=gca;
@@ -636,7 +636,7 @@ f9=figure('name','Monthly medians');
         b=ylim;
         text(1.2,b(1,2)-2,'(e)','HorizontalAlignment','left')
         
-    subplot(4,2,5:6, 'fontsize',10);%Aridity - RCP8.5
+    subplot(4,2,5, 'fontsize',10);%Aridity - RCP8.5
         P=plot(AridityMonthMed(:,1),AridityMonthMed(:,3:nsc+1));
         set(P,{'Color'},colorstruct)
         set(P,{'LineStyle'},linestruct)
@@ -646,14 +646,14 @@ f9=figure('name','Monthly medians');
         set(P,{'Color'},{'k'})
         set(P,{'LineWidth'},{1.5})   
         xlabel('Month','fontsize',8);
-        ylabel('Median monthly aridity index (-)','fontsize',8);
+        ylabel('Median aridity index (-)','fontsize',8);
         axis([1,12,0,6]);
         ax=gca;
         ax.XTick=1:12;
         set(gca,'box','off')  
         b=ylim;
         text(1.1,b(1,2)-0.5,'(c)','HorizontalAlignment','left')
-        
+                
         %align_Ylabels(gcf)
         
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -663,6 +663,18 @@ f9=figure('name','Monthly medians');
 % Define datapath to save figures & other output 
     DatapathOutput=uigetdir('C:\','Select directory to store output of climate scenario comparison');
 
+% save publication figure (f9)
+         fig=f9;
+         fig.PaperUnits='centimeters';
+         fig.PaperPosition=[0 0 16 20];
+         fig.PaperSize=[16 20];
+         %filename=fullfile(DatapathOutput,'WeatherGCM_600dpi');
+         %filename2=fullfile(DatapathOutput,'WeatherGCM_300dpi');
+         filename=fullfile(DatapathOutput,'WeatherSynth_600dpi');
+         filename2=fullfile(DatapathOutput,'WeatherSynth_300dpi');         
+         print(filename,'-dpdf','-r600')
+         print(filename2,'-dpdf','-r300')     
+    
     
 % medians year/summer/winter
 YearMedian=[EToStatsYear(3,:);RainStatsYear(3,:);AridityStatsYear(3,:);TminStatsYear(3,:);TmaxStatsYear(3,:)];
